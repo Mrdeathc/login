@@ -1,0 +1,20 @@
+Estamos creando una API REST
+
+API - Aplicattion Programming interface / Interfaz de prtogramación de Aplicaciones.
+
+    Arquitectura que permite a un desarrollador interactuar con los datos de una aplicación de forma organizada.
+
+    Esta aplicaion s e encuentra alojada en la nube (AWS / IBM Cloud etc....) estando totalmente disponible para su consumo
+    por parte de cualquier cliente (una aplicación FrontEnd como lo puede ser una desarrollada en Angular).
+
+    Un ejemplo de una API es el inicio de sesion a travez de una red social o una cuenta de correo.
+    Una app de geolocalizacion que consume la API de Google Maps.
+
+    La API REST se caracteriz apor manejar la información en formato JSON ya que es un formato de texto sumamente ligero compatible
+    con cualquier lenguaje de prtogramación y a su vez es el intercambio ideal de datos ya que nos permite una facil acceso de cada una
+    de las propiedades ("clave": "valor") para lograr extraer los datos que necesitemos.
+
+REST - Representational State Transfer (Transferencia de estado Representacional)
+    Arquitectura de diseño de aplicaiones en redes. Ofrece tecnologias complejas a partir de los protocolos HTTP Y HTTPS (Hypertext Tansfer Protocol).
+
+    
