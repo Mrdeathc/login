@@ -5,6 +5,8 @@
 */
 
 const Usuario = require('../modelos/usuario'); // Importamos el modelo de usuario
+const fs = require('fs'); // importamos el Modulo File System de Node
+const path = require('path'); // importamos el modulo math de Node
 
 
 // Funcion registro de usuario
@@ -72,9 +74,104 @@ function login(req, res){
     });
 }
 
+// Actualizar Usuario
+
+function actualizarUsuario(req, res){
+    var usuarioId = req.params.id; // 
+    var nuevosDatosUsuario = req.body;
+
+    Usuario.findByIdAndUpdate(usuarioId, nuevosDatosUsuario, (err, usuarioActualizado)=>{
+        if(err){
+            res.status(500).send({message: "Error en el servidor"});
+        }else{
+            if(!usuarioActualizado){
+                res.status(200).send({message: "No fue posible actualizar los datos"})
+            }else {
+                res.status(200).send({usuario: usuarioActualizado});
+            }
+        }
+    });
+}
+
+// Subir Imagen 
+
+function subirImg(req, res){
+    var usuarioId = req.params.id;
+    var nombreArchivo = "No ha subido ninguna imagen...";
+
+    // Validar si efectivamente se está recibiendo la imagen o archivo
+
+    if(req.files){
+        // vamos a ir analizando la ruta del archivo el nombre y la extensión
+        var rutaArchivo = req.files.imagen.path;
+        console.log(rutaArchivo);
+
+        var partirArchivo = rutaArchivo.split('\\');
+        console.log(partirArchivo);
+
+        var nombreArchivo = partirArchivo[2];
+        console.log(nombreArchivo);
+
+        var extensionImg = nombreArchivo.split('\.');
+        console.log(extensionImg);
+
+        var extensionArchivo = extensionImg[1];
+        console.log(extensionArchivo);
+        
+        // Valida r si esl formato del archivo es aceptable
+
+        if(extensionArchivo == "png" || extensionArchivo == "jpg" || extensionArchivo == "jpeg"){
+            // Actualizar del usuario,  el campo imagen que inicialmente teniamos como modulo(null) en el modelo
+            Usuario.findByIdAndUpdate(usuarioId, {imagen: nombreArchivo}, (err, usuarioConImg)=>{
+                if(err){
+                    res.status(500).send({message: "Error en el servidor"});
+                } else {
+                    if(!usuarioConImg){
+                        res.status(200).send({message: "No fue posible subir la imagen"});
+                    }else {
+                        res.status(200).send({
+                            imagen: nombreArchivo, 
+                            usuario: usuarioConImg
+                        });
+                    }
+                }
+            });
+        }else{
+            // Formato invalido
+            res.status(200).send({message: "Formato inválido !! No es una imagen"});
+        }
+
+    } else {
+        // No existe una img para subir
+        res.status(200).send({message: "No ha subido ninguna imagen"});
+    }
+}
+
+// Mostrar archivo
+
+    function mostrarImg(req, res){
+        // pedir el archivo que queremos mostrar
+        var archivo = req.params.imageFile;
+        // Verificamos la carpeta donde se encuetra el archivo
+        var ruta = './archivos/usuarios/' + archivo;
+        // validar si existe la imagen
+        // fs.exists ('el archivo a verificar si existe o no el archivo')
+        fs.exists(ruta, (exists)=>{
+            if(exists){
+                res.sendFile(path.resolve(ruta));
+            }else{
+                res.status(200).send({message: "imagen no encontrada"});
+            }
+        });
+
+    }
+
 // Exportacion de las funciones creadas 
 
 module.exports = {
     crearUsuario,
-    login
+    login,
+    actualizarUsuario,
+    subirImg,
+    mostrarImg
 }

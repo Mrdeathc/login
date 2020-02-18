@@ -7,8 +7,11 @@
 
 const express = require('express');
 const UsuarioControl = require('../control/usuarioControl'); // Importamos el controlador de las funciones
+const multipart = require('connect-multiparty'); // Importamos el paquete connect-multiparty
+const subirImgDirectiorio = multipart({uploadDir: './archivos/usuarios'});
 
 var api = express.Router(); // Cargamos el manejador de rutas de Express
+
 
 /* 
 
@@ -28,6 +31,12 @@ api.post('/registro', UsuarioControl.crearUsuario);
 // Ruta login usuario
 // en el caso de un logi o un inicio de sesion utilizamos el emtodo POST en vez de GET
 api.post('/loginUsuario', UsuarioControl.login);
+// Ruta actualizar datos 
+api.put('/actualizar-usuario/:id', UsuarioControl.actualizarUsuario);
+// Ruta subir imagen
+api.put('/subir-imagen/:id', subirImgDirectiorio, UsuarioControl.subirImg);
+// Ruta Mostrar archivo
+api.get('/obtener-imagen/:imageFile', UsuarioControl.mostrarImg);
 
 // Exportación del archivo usuarioRutas
 module.exports = api;
